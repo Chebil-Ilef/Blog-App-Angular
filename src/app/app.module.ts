@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { getStorage, provideStorage } from '@angular/fire/storage';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { FirestoreModule, getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { HeaderComponent } from './layouts/header/header.component';
 import { CategoryNavbarComponent } from './layouts/category-navbar/category-navbar.component';
 import { FooterComponent } from './layouts/footer/footer.component';
@@ -19,7 +18,6 @@ import { SubscriptionFormComponent } from './subscription-form/subscription-form
 import { CommentFormComponent } from './comments/comment-form/comment-form.component';
 import { CommentListComponent } from './comments/comment-list/comment-list.component';
 import { PostCardComponent } from './layouts/post-card/post-card.component';
-
 import { MainComponent } from './sections/main/main.component';
 import { DashboardComponent } from './sections/dashboard/dashboard.component';
 import { DashboardHomeComponent } from './pages/dashboard-home/dashboard-home.component';
@@ -31,6 +29,7 @@ import { NewPostComponent } from './pages/dashboard-posts/new-post/new-post.comp
 import { PostTitlePipe } from './pipes/post-title.pipe';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { HttpClientModule } from '@angular/common/http';
+import { TimestampToDatePipe } from './pipes/timestamp-to-date.pipe';
 
 @NgModule({
   declarations: [
@@ -52,9 +51,8 @@ import { HttpClientModule } from '@angular/common/http';
     DashboardCategoriesComponent,
     AllPostsComponent,
     NewPostComponent,
-    PostTitlePipe
-
-
+    PostTitlePipe,
+    TimestampToDatePipe
   ],
   imports: [
     BrowserModule,
@@ -67,14 +65,14 @@ import { HttpClientModule } from '@angular/common/http';
       messagingSenderId: "613877446325",
       appId: "1:613877446325:web:215334c7308c637d31f0fc"
     })),
-    provideFirestore(() => getFirestore()),
+    provideStorage(() => getStorage()),
+    FirestoreModule,
     FormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     AngularEditorModule,
     HttpClientModule,
-    ReactiveFormsModule
-
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
