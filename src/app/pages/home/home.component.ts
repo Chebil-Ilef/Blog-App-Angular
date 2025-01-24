@@ -12,4 +12,5 @@ export class HomeComponent {
 
   blogPostsService : BlogPostsService = inject(BlogPostsService)
   featuredPosts$ : Observable<BlogPostWithId[]> = this.blogPostsService.getFeaturedPosts()
+  latestPosts$ : Observable<BlogPostWithId[]> = this.blogPostsService.getLatestPosts()
 }
