@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { BlogPostWithId } from 'src/app/Models/BlogPostWithId.model';
+import { BlogPostsService } from 'src/app/services/blog-posts.service';
 
 @Component({
   selector: 'app-home',
@@ -7,4 +10,6 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent {
 
+  blogPostsService : BlogPostsService = inject(BlogPostsService)
+  featuredPosts$ : Observable<BlogPostWithId[]> = this.blogPostsService.getFeaturedPosts()
 }
