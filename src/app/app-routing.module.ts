@@ -12,6 +12,7 @@ import { AllPostsComponent } from './pages/dashboard-posts/all-posts/all-posts.c
 import { NewPostComponent } from './pages/dashboard-posts/new-post/new-post.component';
 import { LoginComponent } from './pages/auth/login/login.component';
 import { authGuard } from './guards/auth.guard';
+import { DashboardSubscribersComponent } from './pages/dashboard-subscribers/dashboard-subscribers.component';
 
 const routes: Routes = [
   { path : '', component : MainComponent, children : [
@@ -24,6 +25,7 @@ const routes: Routes = [
     { path : '', component : LoginComponent},
     { path : 'home', component : DashboardHomeComponent, canActivate : [authGuard]},
     { path : 'categories', component : DashboardCategoriesComponent, canActivate : [authGuard]},
+    { path : 'subscribers', component : DashboardSubscribersComponent, canActivate : [authGuard]},
     { path : 'posts', component : AllPostsComponent, canActivate : [authGuard]},
     { path : 'posts/new', component : NewPostComponent, canActivate : [authGuard]},
     { path : '**', component : DashboardComponent, canActivate : [authGuard]}
