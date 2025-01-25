@@ -14,6 +14,8 @@ import { LoginComponent } from './pages/auth/login/login.component';
 import { authGuard } from './guards/auth.guard';
 import { DashboardSubscribersComponent } from './pages/dashboard-subscribers/dashboard-subscribers.component';
 import { DashboardCommentsComponent } from './pages/dashboard-comments/dashboard-comments.component';
+import { loggedInGuard } from './guards/logged-in.guard';
+import { ErrorPageComponent } from './pages/error-page/error-page.component';
 
 const routes: Routes = [
   { path : '', component : MainComponent, children : [
@@ -23,7 +25,7 @@ const routes: Routes = [
     { path: 'contact', component : ContactUsComponent}
   ]},
   { path : 'dashboard', component: DashboardComponent , children :[
-    { path : '', component : LoginComponent},
+    { path : '', component : LoginComponent, canActivate : [loggedInGuard]},
     { path : 'home', component : DashboardHomeComponent, canActivate : [authGuard]},
     { path : 'categories', component : DashboardCategoriesComponent, canActivate : [authGuard]},
     { path : 'subscribers', component : DashboardSubscribersComponent, canActivate : [authGuard]},
