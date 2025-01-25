@@ -13,6 +13,7 @@ import { NewPostComponent } from './pages/dashboard-posts/new-post/new-post.comp
 import { LoginComponent } from './pages/auth/login/login.component';
 import { authGuard } from './guards/auth.guard';
 import { DashboardSubscribersComponent } from './pages/dashboard-subscribers/dashboard-subscribers.component';
+import { DashboardCommentsComponent } from './pages/dashboard-comments/dashboard-comments.component';
 
 const routes: Routes = [
   { path : '', component : MainComponent, children : [
@@ -27,6 +28,7 @@ const routes: Routes = [
     { path : 'categories', component : DashboardCategoriesComponent, canActivate : [authGuard]},
     { path : 'subscribers', component : DashboardSubscribersComponent, canActivate : [authGuard]},
     { path : 'posts', component : AllPostsComponent, canActivate : [authGuard]},
+    { path : 'comments', component : DashboardCommentsComponent, canActivate : [authGuard]},
     { path : 'posts/new', component : NewPostComponent, canActivate : [authGuard]},
     { path : '**', component : DashboardComponent, canActivate : [authGuard]}
   ]}
