@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy,Component, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { BlogPostsService } from 'src/app/services/blog-posts.service';
 import { CategoriesService } from 'src/app/services/categories.service';
@@ -8,7 +8,8 @@ import { SubscribersService } from 'src/app/services/subscribers.service';
 @Component({
   selector: 'app-dashboard-home',
   templateUrl: './dashboard-home.component.html',
-  styleUrls: ['./dashboard-home.component.css']
+  styleUrls: ['./dashboard-home.component.css'],
+  changeDetection : ChangeDetectionStrategy.OnPush
 })
 
 export class DashboardHomeComponent {
