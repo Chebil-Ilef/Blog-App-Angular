@@ -8,9 +8,9 @@ export const similarPostsResolver: ResolveFn<Observable<BlogPostWithId[] | null>
 
   const router: Router = inject(Router)
   const blogPostsService: BlogPostsService = inject(BlogPostsService)
-  const categoryId = route.params['categoryId'];
-
-  return blogPostsService.loadSimilarPosts(categoryId).pipe(
+  const postLink = route.params['postLink'];
+  
+  return blogPostsService.loadSimilarPosts(postLink).pipe(
       catchError(() => {
         router.navigate(['/error']);
         return of(null);
