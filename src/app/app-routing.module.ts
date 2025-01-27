@@ -19,6 +19,11 @@ const routes: Routes = [
     { path: 'post/:categoryId/:id', component : SinglePostComponent, 
       // resolve : { postData : postDataResolver , similarPosts: similarPostsResolver  } 
     },
+    { path: 'post/:postLink', component : SinglePostComponent, 
+      resolve : { postData : postDataResolver 
+        // , similarPosts: similarPostsResolver  
+      }
+    }, 
     { path: 'contact', component : ContactUsComponent}
   ]},
   { path : 'dashboard', loadChildren: ()=> import('./dashboard/dashboard.module').then((m)=> m.DashboardModule)},
