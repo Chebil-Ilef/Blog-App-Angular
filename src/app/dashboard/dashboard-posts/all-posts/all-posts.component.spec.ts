@@ -8,8 +8,8 @@ describe('AllPostsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [AllPostsComponent]
-    });
+    imports: [AllPostsComponent]
+});
     fixture = TestBed.createComponent(AllPostsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

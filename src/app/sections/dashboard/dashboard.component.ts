@@ -1,12 +1,16 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLinkActive, RouterLink, RouterOutlet } from '@angular/router';
 import { observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
+import { NgClass } from '@angular/common';
+
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+    selector: 'app-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.css'],
+    standalone: true,
+    imports: [NgClass, RouterLinkActive, RouterLink, RouterOutlet]
 })
 export class DashboardComponent  {
 private route=inject(ActivatedRoute)

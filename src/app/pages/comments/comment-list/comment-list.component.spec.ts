@@ -8,8 +8,8 @@ describe('CommentListComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [CommentListComponent]
-    });
+    imports: [CommentListComponent]
+});
     fixture = TestBed.createComponent(CommentListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
