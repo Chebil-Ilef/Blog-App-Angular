@@ -13,13 +13,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { HttpClientModule } from '@angular/common/http';
-import { SharedComponentsModule } from '../shared-components/shared-components.module';
+
 import { DashboardRoutingModule } from './dashboard-routing.module';
 
 
 
 @NgModule({
-  declarations: [
+    imports: [
+    CommonModule,
+    DashboardRoutingModule,
+    FormsModule,
+    ToastrModule.forRoot(),
+    AngularEditorModule,
+    HttpClientModule,
+    ReactiveFormsModule,
     DashboardComponent,
     DashboardHomeComponent,
     DashboardCategoriesComponent,
@@ -28,17 +35,7 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
     NewPostComponent,
     LoginComponent,
     DashboardSubscribersComponent,
-    DashboardCommentsComponent
-  ],
-  imports: [
-    CommonModule,
-    DashboardRoutingModule,
-    FormsModule,
-    ToastrModule.forRoot(),
-    AngularEditorModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    SharedComponentsModule,
-  ]
+    DashboardCommentsComponent,
+]
 })
 export class DashboardModule { }

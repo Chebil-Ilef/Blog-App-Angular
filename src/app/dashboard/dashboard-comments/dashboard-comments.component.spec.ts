@@ -8,8 +8,8 @@ describe('DashboardCommentsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [DashboardCommentsComponent]
-    });
+    imports: [DashboardCommentsComponent]
+});
     fixture = TestBed.createComponent(DashboardCommentsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

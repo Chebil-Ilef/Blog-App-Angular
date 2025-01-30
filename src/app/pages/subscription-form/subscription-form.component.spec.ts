@@ -8,8 +8,8 @@ describe('SubscriptionFormComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SubscriptionFormComponent]
-    });
+    imports: [SubscriptionFormComponent]
+});
     fixture = TestBed.createComponent(SubscriptionFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -8,8 +8,8 @@ describe('ErrorPageComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ErrorPageComponent]
-    });
+    imports: [ErrorPageComponent]
+});
     fixture = TestBed.createComponent(ErrorPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

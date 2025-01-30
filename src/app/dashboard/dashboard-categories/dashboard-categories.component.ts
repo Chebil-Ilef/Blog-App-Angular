@@ -1,15 +1,18 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Category } from 'src/app/Models/Category.model';
 import { CategoryWithId } from 'src/app/Models/CategoryWithId.model';
 import { CategoriesService } from 'src/app/services/categories.service';
+import { NgClass, NgIf, NgFor, AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-dashboard-categories',
-  templateUrl: './dashboard-categories.component.html',
-  styleUrls: ['./dashboard-categories.component.css'],
-  changeDetection : ChangeDetectionStrategy.OnPush
+    selector: 'app-dashboard-categories',
+    templateUrl: './dashboard-categories.component.html',
+    styleUrls: ['./dashboard-categories.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [FormsModule, NgClass, NgIf, NgFor, AsyncPipe]
 })
 export class DashboardCategoriesComponent {
 
