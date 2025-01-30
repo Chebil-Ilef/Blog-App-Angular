@@ -14,11 +14,11 @@ import { HeaderComponent } from '../../../shared-components/header/header.compon
     imports: [HeaderComponent, FormsModule, NgClass, FooterComponent]
 })
 export class LoginComponent {
+  authService: AuthService = inject(AuthService);
 
-  authService : AuthService = inject(AuthService)
+  onSubmit(loginForm: NgForm) {
+    if (loginForm.invalid) return; // Prevent submission if form is invalid
 
-  onSubmit(loginForm : NgForm){
-    this.authService.login(loginForm.value.email, loginForm.value.password)
+    this.authService.login(loginForm.value.email, loginForm.value.password).subscribe();
   }
-
 }
