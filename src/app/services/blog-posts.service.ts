@@ -3,7 +3,7 @@ import { Storage, getDownloadURL, ref, uploadBytes } from '@angular/fire/storage
 import { ToastrService } from 'ngx-toastr';
 import { BlogPost } from '../Models/BlogPost.model';
 import { Firestore, collection, addDoc, collectionData, doc, docData, updateDoc, deleteDoc, where, limit, increment, getDoc, getDocs } from '@angular/fire/firestore';
-import { Observable, from, map } from 'rxjs';
+import { Observable, catchError, from, map, of, switchMap, throwError } from 'rxjs';
 import { BlogPostWithId } from '../Models/BlogPostWithId.model';
 import { Router } from '@angular/router';
 import { orderBy, query } from 'firebase/firestore';
@@ -42,19 +42,20 @@ export class BlogPostsService {
     })
   }
 
-  saveData(postData : BlogPost){
-    let blogPostCollection = collection(this.firestore, 'blogposts')
-    addDoc(blogPostCollection, postData).then(
-      docRef =>{
-        this.toastr.success("Blog Post Added Successfully !")
-        this.router.navigate(['/dashboard/posts'])
-      }
-    ).catch(
-      err => {
-        console.log(err);
-        this.toastr.error("An error has occured while saving the data !")
-      }
-    )
+  saveData(postData: BlogPost): Observable<any> { // Make saveData return an Observable
+    let blogPostCollection = collection(this.firestore, 'blogposts');
+    return from(addDoc(blogPostCollection, postData)).pipe( // Use from to convert the Promise
+      switchMap(docRef => { // Use switchMap to handle the docRef and return a new observable if needed. If not, you can just return of(docRef)
+        this.toastr.success("Blog Post Added Successfully!");
+        this.router.navigate(['/dashboard/posts']);
+        return of(docRef); // Return the document reference if needed or just an empty observable of()
+      }),
+      catchError(err => {
+        console.error(err);
+        this.toastr.error("An error has occurred while saving the data!");
+        return throwError(() => err);
+      })
+    );
   }
 
   loadData(){
@@ -83,42 +84,47 @@ export class BlogPostsService {
       })
     )
   }
-  updateData(id : string, editedData : BlogPost){
-    let docReference = doc(this.firestore,'blogposts',id)    
-    updateDoc(docReference, {
-      ...editedData
-    }).then( docRef =>{
-      this.toastr.success("Blog Post Updated Successfully !")
-      this.router.navigate(['/dashboard/posts'])
-    }).catch(
-      err => {
-        this.toastr.error(err.message)
-      }
-    )
+  updateData(id: string, editedData: BlogPost): Observable<any> {
+    let docReference = doc(this.firestore, 'blogposts', id);
+    return from(updateDoc(docReference, { ...editedData })).pipe( // Use from()
+      switchMap(() => { // Use switchMap to execute navigation after the update
+        this.toastr.success("Blog Post Updated Successfully!");
+        this.router.navigate(['/dashboard/posts']);
+        return of(null); // Return an Observable (even if void)
+      }),
+      catchError((err) => {
+        this.toastr.error(err.message);
+        return throwError(() => err); // Re-throw the error
+      })
+    );
   }
-
-  deleteData(id : string){
-    let docReference = doc(this.firestore,'blogposts',id)
-    deleteDoc(docReference).then( docRef =>{
-      this.toastr.success("Post Deleted Successfully !")
-    }).catch(
-      err => {
-        this.toastr.error(err.message)
-      }
-    )
+  
+  deleteData(id: string): Observable<any> {
+    let docReference = doc(this.firestore, 'blogposts', id);
+    return from(deleteDoc(docReference)).pipe( // Use from()
+      switchMap(() => {
+        this.toastr.success("Post Deleted Successfully!");
+        return of(null); // Return an Observable
+      }),
+      catchError((err) => {
+        this.toastr.error(err.message);
+        return throwError(() => err);
+      })
+    );
   }
-
-  markFeatured(id : string, featuredData : any){
-    let docReference = doc(this.firestore,'blogposts',id)    
-    updateDoc(docReference, {
-      ...featuredData
-    }).then( docRef =>{
-      this.toastr.info("Featured status updated !")
-    }).catch(
-      err => {
-        this.toastr.error(err.message)
-      }
-    )
+  
+  markFeatured(id: string, featuredData: any): Observable<any> {
+    let docReference = doc(this.firestore, 'blogposts', id);
+    return from(updateDoc(docReference, { ...featuredData })).pipe( // Use from()
+      switchMap(() => {
+        this.toastr.info("Featured status updated!");
+        return of(null); // Return an Observable
+      }),
+      catchError((err) => {
+        this.toastr.error(err.message);
+        return throwError(() => err);
+      })
+    );
   }
 
   getFeaturedPosts(){
@@ -142,12 +148,13 @@ export class BlogPostsService {
     let q = query(catCollection, where('category.categoryId', '==', categoryId), limit(3))
     return collectionData(q, { idField: 'id' }) as Observable<BlogPostWithId[]>;
   }
-  countViews(id : string){
-    let docReference = doc(this.firestore,'blogposts',id)      
-    updateDoc(docReference, {
-      views : increment(1) 
-    }).then( docRef =>{
-      
-    })
+  countViews(id: string): Observable<void> {
+    let docReference = doc(this.firestore,'blogposts',id);
+    return from(updateDoc(docReference, { views: increment(1) })).pipe(
+      catchError(error => {
+        console.error("Error incrementing views:", error);
+        return throwError(() => error); // Re-throw the error as an Observable error
+      })
+    );
   }
 }
