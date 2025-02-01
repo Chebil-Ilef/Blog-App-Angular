@@ -39,44 +39,39 @@ export class HomeComponent {
 
   totalPosts = 0;
   
+// Observable for accumulating latest posts
+latestPosts$: Observable<BlogPostWithId[]> = this.paginationSubject.pipe(
+  takeWhile(
+    ({ lastVisibleDoc }) => lastVisibleDoc !== null,
+    true
+  ),
+  concatMap(({ limit, lastVisibleDoc }) =>
+    this.blogPostsService.getLatestPosts(limit, lastVisibleDoc).pipe(
+      tap((data) => {
+        this.totalPosts = data.total;
+        console.log('Fetched posts:', data.posts);
+        console.log('Last visible document:', data.lastVisible);
 
-  // Observable for accumulating latest posts
-  latestPosts$: Observable<BlogPostWithId[]> = this.paginationSubject.pipe(
-    takeWhile(
-      ({ lastVisibleDoc }) => lastVisibleDoc !== null, 
-      true 
-    ),
-    /*
-    takeWhile(
-      ({ lastVisibleDoc }) => this.totalPosts === 0 || lastVisibleDoc !== null,
-      true
-    ),*/
-    concatMap(({ limit, lastVisibleDoc }) =>
-      this.blogPostsService.getLatestPosts(limit, lastVisibleDoc).pipe(
-        tap((data) => {
-          this.totalPosts = data.total; 
-          console.log('Fetched posts:', data.posts);
-          console.log('Last visible document:', data.lastVisible);
-        }),
-        
-        map((data) => ({ posts: data.posts, lastVisibleDoc: data.lastVisible })),
-        catchError(() => of({ posts: [], lastVisibleDoc: null })) 
-      )
-    ),
-    scan(
-      (acc, { posts, lastVisibleDoc }) => {
-        console.log('Scan - lastVisibleDoc:', lastVisibleDoc); // Debugging log
-        // Accumulate posts
-        const newPosts = [...acc, ...posts];
         // Update the lastVisibleDoc in the paginationSubject
-        if (lastVisibleDoc) {
-          this.paginationSubject.next({ limit: this.paginationSubject.value.limit, lastVisibleDoc });
+        if (data.lastVisible) {
+          this.paginationSubject.next({ limit, lastVisibleDoc: data.lastVisible });
         }
-        return newPosts;
-      },
-      [] as BlogPostWithId[]
+      }),
+      map((data) => ({ posts: data.posts, lastVisibleDoc: data.lastVisible })),
+      catchError(() => of({ posts: [], lastVisibleDoc: null }))
     )
-  );
+  ),
+  scan(
+    (acc, { posts, lastVisibleDoc }) => {
+      console.log('Scan - lastVisibleDoc:', lastVisibleDoc); // Debugging log
+      // Accumulate posts
+      const newPosts = [...acc, ...posts];
+      return newPosts;
+    },
+    [] as BlogPostWithId[]
+  )
+);
+
 loadMore(): void {
   console.log('Load More button clicked'); // Debugging log
   const { limit, lastVisibleDoc } = this.paginationSubject.value;
