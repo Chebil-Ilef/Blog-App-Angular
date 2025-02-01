@@ -45,25 +45,17 @@
   
     <!-- Posts Grid -->
     <div class="row">
-      <div class="col-md-4 mt-3" *ngFor="let post of latestPosts$ | async">
+      <div class="col-md-4 mt-3" *ngFor="let post of latestPosts$ | async as latestPosts">
         <app-post-card [postInfo]="post"></app-post-card>
       </div>
     </div>
-
-  <!-- Debugging Information -->
-  <div class="text-center mt-4">
-    <p>Debugging Information:</p>
-    <p>lastVisibleDoc: {{ (paginationSubject | async)?.lastVisibleDoc}}</p>
-    <p>totalPosts: {{ totalPosts }}</p>
-    <p>Latest Posts Count: {{ (latestPosts$ | async)?.length }}</p>
-  </div>
     <!-- Load More Button -->
-    <div class="text-center mt-4" *ngIf="(paginationSubject | async)?.lastVisibleDoc !== null">
+    <div class="text-center mt-4" *ngIf="lastVisiblePost !== null">
       <button class="btn btn-primary" (click)="loadMore()">Load More</button>
     </div>
   
     <!-- No More Posts Message -->
-    <div class="text-center mt-4" *ngIf="(paginationSubject | async)?.lastVisibleDoc === null && totalPosts > 0">
+    <div class="text-center mt-4" *ngIf="lastVisiblePost === null && totalPosts > 0">
       <p>No more posts to load.</p>
     </div>
   </section>

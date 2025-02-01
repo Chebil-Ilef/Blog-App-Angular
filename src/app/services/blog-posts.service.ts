@@ -3,7 +3,7 @@ import { Storage, getDownloadURL, ref, uploadBytes } from '@angular/fire/storage
 import { ToastrService } from 'ngx-toastr';
 import { BlogPost } from '../Models/BlogPost.model';
 import { Firestore, collection, addDoc, collectionData, doc, docData, updateDoc,DocumentSnapshot, deleteDoc,startAfter, where, limit, increment, getDoc, getDocs } from '@angular/fire/firestore';
-import { Observable, from, map,catchError,switchMap } from 'rxjs';
+import { Observable, from, map,catchError } from 'rxjs';
 import { BlogPostWithId } from '../Models/BlogPostWithId.model';
 import { Router } from '@angular/router';
 import { orderBy, query } from 'firebase/firestore';
@@ -127,7 +127,7 @@ export class BlogPostsService {
     return collectionData(q, { idField: 'id' }) as Observable<BlogPostWithId[]>;
   }
 
-  getLatestPosts(limitCount: number, lastVisibleDoc: DocumentSnapshot | null): Observable<{ posts: BlogPostWithId[]; total: number; lastVisible: DocumentSnapshot | null }> {
+  getLatestPosts(limitCount: number, lastVisibleDoc: DocumentSnapshot | null) {
     const catCollection = collection(this.firestore, 'blogposts');
   
     let q = query(
@@ -143,7 +143,7 @@ export class BlogPostsService {
   
     // Convert Firestore query to Observable
     return from(getDocs(q)).pipe(
-      switchMap((querySnapshot) => {
+      map((querySnapshot) => {
         const posts: BlogPostWithId[] = [];
         let lastVisible: DocumentSnapshot | null = null;
   
@@ -157,19 +157,18 @@ export class BlogPostsService {
         }
   
         // Fetch the total number of posts
-        return from(getDocs(catCollection)).pipe(
-          map((totalSnapshot) => ({
-            posts,
-            total: totalSnapshot.size,
-            lastVisible,
-          }))
-        );
+        return {posts: posts, lastVisible: lastVisible};
       }),
       catchError((error) => {
         console.error('Error fetching posts:', error);
         throw error; // Re-throw the error to be handled by the caller
       })
     );
+  }
+
+  getTotalPostsCount(){
+    const catCollection = collection(this.firestore, 'blogposts');
+    return from(getDocs(catCollection));
   }
   loadCategoryPosts(categoryId : string){
     let catCollection = collection(this.firestore, 'blogposts')
