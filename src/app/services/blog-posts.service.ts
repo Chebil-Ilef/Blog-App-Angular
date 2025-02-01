@@ -3,10 +3,13 @@ import { Storage, getDownloadURL, ref, uploadBytes } from '@angular/fire/storage
 import { ToastrService } from 'ngx-toastr';
 import { BlogPost } from '../Models/BlogPost.model';
 import { Firestore, collection, addDoc, collectionData, doc, docData, updateDoc,DocumentSnapshot, deleteDoc,startAfter, where, limit, increment, getDoc, getDocs } from '@angular/fire/firestore';
-import { Observable, from, map,catchError } from 'rxjs';
+import { Observable, from, map,catchError, of } from 'rxjs';
 import { BlogPostWithId } from '../Models/BlogPostWithId.model';
 import { Router } from '@angular/router';
 import { orderBy, query } from 'firebase/firestore';
+import { switchMap } from 'rxjs/operators';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -20,27 +23,35 @@ export class BlogPostsService {
   private firestore : Firestore = inject(Firestore);
   private router : Router = inject(Router)
 
-  addPost(input: any, postData : BlogPost, formStatus : string, id : string) {
-    const filePath = `blogPostsImages/${Date.now()}`
-    const storageRef = ref(this.storage, filePath);
-    uploadBytes(storageRef, input).then(()=>{
-      getDownloadURL(storageRef).then((URL)=>{
-        postData.postImg = URL       
+addPost(input: any, postData: BlogPost, formStatus: string, id: string) {
+  const filePath = `blogPostsImages/${Date.now()}`;
+  const storageRef = ref(this.storage, filePath);
 
-        if(formStatus == "Edit"){
-          this.updateData(id, postData)
-        }else{
-          this.saveData(postData)    
-        }
-      }).catch((err)=>{
-        console.log(err);
+  from(uploadBytes(storageRef, input)).pipe(
+    switchMap(() => from(getDownloadURL(storageRef))),
+    catchError((err) => {
+      this.toastr.warning("An error has occurred while uploading the image! We will give you a placeholder image instead.");
+      // Use a hardcoded dummy image URL in case of failure
+      return of("./assets/image-placeholder.png");
 
-        this.toastr.error("An error has occured while getting the image URL !")
-      })
-    }).catch((err)=>{
-      this.toastr.error("An error has occured while uploading the image !")
     })
-  }
+  ).subscribe({
+    next: (URL) => {
+      postData.postImg = URL;
+
+      if (formStatus === "Edit") {
+        this.updateData(id, postData);
+      } else {
+        this.saveData(postData);
+      }
+    },
+    error: (err) => {
+      this.toastr.error("An error has occurred while getting the image URL!");
+      console.log(err);
+    }
+  });
+}
+
 
   saveData(postData : BlogPost){
     let blogPostCollection = collection(this.firestore, 'blogposts')
