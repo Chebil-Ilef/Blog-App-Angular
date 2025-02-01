@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Storage, getDownloadURL, ref, uploadBytes } from '@angular/fire/storage';
 import { ToastrService } from 'ngx-toastr';
 import { BlogPost } from '../Models/BlogPost.model';
-import { Firestore, collection, addDoc, collectionData, doc, docData, updateDoc, deleteDoc, where, limit, increment, getDoc, getDocs } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, collectionData, doc, docData, updateDoc,DocumentSnapshot, deleteDoc,startAfter, where, limit, increment, getDoc, getDocs } from '@angular/fire/firestore';
 import { Observable, from, map } from 'rxjs';
 import { BlogPostWithId } from '../Models/BlogPostWithId.model';
 import { Router } from '@angular/router';
@@ -127,11 +127,50 @@ export class BlogPostsService {
     return collectionData(q, { idField: 'id' }) as Observable<BlogPostWithId[]>;
   }
 
-  getLatestPosts(){
-    let catCollection = collection(this.firestore, 'blogposts')
-    let q = query(catCollection, orderBy('createdAt', 'desc'), limit(6))
-    return collectionData(q, { idField: 'id' }) as Observable<BlogPostWithId[]>;
-  }
+    getLatestPosts(limitCount: number, lastVisibleDoc: DocumentSnapshot | null): Observable<{ posts: BlogPostWithId[]; total: number; lastVisible: DocumentSnapshot | null }> {
+      return new Observable((observer) => {
+        console.log('getLatestPosts - limit:', limitCount, 'lastVisibleDoc:', lastVisibleDoc);
+        const catCollection = collection(this.firestore, 'blogposts');
+    
+        let q = query(
+          catCollection,
+          orderBy('createdAt', 'desc'),
+          limit(limitCount)
+        );
+    
+        // Add startAfter if lastVisibleDoc is provided
+        if (lastVisibleDoc) {
+          q = query(q, startAfter(lastVisibleDoc));
+        }
+    
+        getDocs(q).then((querySnapshot) => {
+          const posts: BlogPostWithId[] = [];
+          let lastVisible: DocumentSnapshot | null = null;
+    
+          querySnapshot.forEach((doc) => {
+            posts.push({ id: doc.id, ...doc.data() } as BlogPostWithId);
+          });
+    
+          // Get the last visible document for pagination
+          if (querySnapshot.docs.length > 0) {
+            lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+          }
+    
+          // Get the total number of posts (only once, if not already set)
+          getDocs(catCollection).then((totalSnapshot) => {
+            const total = totalSnapshot.size;
+            observer.next({ posts, total, lastVisible });
+            observer.complete();
+          }).catch((error) => {
+            console.error('Error fetching total posts:', error);
+            observer.error(error);
+          });
+        }).catch((error) => {
+          console.error('Error fetching posts:', error);
+          observer.error(error);
+        });
+      });
+    } 
   loadCategoryPosts(categoryId : string){
     let catCollection = collection(this.firestore, 'blogposts')
     let q = query(catCollection, where('category.categoryId', '==', categoryId))
