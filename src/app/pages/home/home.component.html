@@ -37,16 +37,25 @@
         </div>
     </div>
 </section>
-
 <section class="container mt-5">
+    <!-- Latest Posts Section -->
     <div class="col-md-12 text-center">
-        <h2> Latest Posts </h2>
+      <h2>Latest Posts</h2>
     </div>
-
+  
+    <!-- Posts Grid -->
     <div class="row">
-        <div class="col-md-4 mt-3" *ngFor="let latestPosts of latestPosts$ | async">
-            <app-post-card [postInfo]="latestPosts"></app-post-card>
-        </div>
+      <div class="col-md-4 mt-3" *ngFor="let post of latestPosts$ | async as latestPosts">
+        <app-post-card [postInfo]="post"></app-post-card>
+      </div>
     </div>
-
-</section>
+    <!-- Load More Button -->
+    <div class="text-center mt-4" *ngIf="lastVisiblePost !== null">
+      <button class="btn btn-primary" (click)="loadMore()">Load More</button>
+    </div>
+  
+    <!-- No More Posts Message -->
+    <div class="text-center mt-4" *ngIf="lastVisiblePost === null && totalPosts > 0">
+      <p>No more posts to load.</p>
+    </div>
+  </section>
