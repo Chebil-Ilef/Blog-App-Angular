@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({
-  name: 'timestampToDate'
+    name: 'timestampToDate',
+    standalone: true
 })
 export class TimestampToDatePipe implements PipeTransform {
   transform(timestamp: { seconds: number, nanoseconds: number }): Date|null {

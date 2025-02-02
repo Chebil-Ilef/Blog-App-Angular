@@ -1,19 +1,33 @@
 import { ChangeDetectionStrategy,Component, OnDestroy, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { CategoryWithId } from 'src/app/Models/CategoryWithId.model';
 import { BlogPost } from 'src/app/Models/BlogPost.model';
 import { CategoriesService } from 'src/app/services/categories.service';
 import { BlogPostsService } from 'src/app/services/blog-posts.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { BlogPostWithId } from 'src/app/Models/BlogPostWithId.model';
+import { PostTitlePipe } from '../../../pipes/post-title.pipe';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { NgIf, NgClass, NgFor, AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-new-post',
-  templateUrl: './new-post.component.html',
-  styleUrls: ['./new-post.component.css'],
-  changeDetection : ChangeDetectionStrategy.OnPush,
-
+    selector: 'app-new-post',
+    templateUrl: './new-post.component.html',
+    styleUrls: ['./new-post.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgIf,
+        FormsModule,
+        ReactiveFormsModule,
+        NgClass,
+        NgFor,
+        AngularEditorModule,
+        RouterLink,
+        AsyncPipe,
+        PostTitlePipe,
+    ],
 })
 export class NewPostComponent implements OnDestroy {
 

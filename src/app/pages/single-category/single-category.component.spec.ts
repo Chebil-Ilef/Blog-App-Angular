@@ -8,8 +8,8 @@ describe('SingleCategoryComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SingleCategoryComponent]
-    });
+    imports: [SingleCategoryComponent]
+});
     fixture = TestBed.createComponent(SingleCategoryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

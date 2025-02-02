@@ -1,14 +1,17 @@
 import { ChangeDetectionStrategy,Component, inject } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ContactForm } from 'src/app/Models/ContactForm.model';
 import { ContactService } from 'src/app/services/contact.service';
+import { NgIf, AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-contact-us',
-  templateUrl: './contact-us.component.html',
-  styleUrls: ['./contact-us.component.css'],
-  changeDetection : ChangeDetectionStrategy.OnPush
+    selector: 'app-contact-us',
+    templateUrl: './contact-us.component.html',
+    styleUrls: ['./contact-us.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [FormsModule, NgIf, AsyncPipe]
 })
 export class ContactUsComponent {
 
