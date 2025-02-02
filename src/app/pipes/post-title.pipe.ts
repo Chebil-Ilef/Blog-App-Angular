@@ -2,8 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import memo from 'memo-decorator'
 
 @Pipe({
-  name: 'postTitlePipe',
-  pure : true
+    name: 'postTitlePipe',
+    pure: true,
+    standalone: true
 })
 
 export class PostTitlePipe implements PipeTransform {

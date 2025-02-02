@@ -4,12 +4,15 @@ import { BlogPostsService } from 'src/app/services/blog-posts.service';
 import { CategoriesService } from 'src/app/services/categories.service';
 import { CommentsService } from 'src/app/services/comments.service';
 import { SubscribersService } from 'src/app/services/subscribers.service';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-dashboard-home',
-  templateUrl: './dashboard-home.component.html',
-  styleUrls: ['./dashboard-home.component.css'],
-  changeDetection : ChangeDetectionStrategy.OnPush
+    selector: 'app-dashboard-home',
+    templateUrl: './dashboard-home.component.html',
+    styleUrls: ['./dashboard-home.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [AsyncPipe]
 })
 
 export class DashboardHomeComponent {
