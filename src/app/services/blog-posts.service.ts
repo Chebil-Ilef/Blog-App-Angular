@@ -7,7 +7,6 @@ import { Observable, catchError, from, map, of, switchMap, throwError } from 'rx
 import { BlogPostWithId } from '../Models/BlogPostWithId.model';
 import { Router } from '@angular/router';
 import { orderBy, query } from 'firebase/firestore';
-import { switchMap } from 'rxjs/operators';
 
 
 

@@ -24,7 +24,7 @@ export class ContactUsComponent {
       email : data.value.email,
       message : data.value.message,
       subject : data.value.subject,
-      access_key : "6d128682-0006-4705-92a2-c0cd285f5fac"
+      access_key : "6ac8f221-72fa-428d-9137-c7c4d2184d6a"
     }
 
     this.response = this.contactService.sendMessage(dataToSend)

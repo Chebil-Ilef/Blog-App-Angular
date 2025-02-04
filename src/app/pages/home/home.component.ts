@@ -36,7 +36,7 @@ export class HomeComponent {
 
   totalPosts = 0;
 
-  lastVisiblePost: DocumentSnapshot<DocumentData| DocumentData> | null = null;
+  lastVisiblePost: DocumentSnapshot<DocumentData> | null = null;
 
   totalPosts$ = this.blogPostsService.getTotalPostsCount().pipe(
     map((response) => response.size),
