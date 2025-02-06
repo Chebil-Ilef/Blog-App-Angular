@@ -19,12 +19,13 @@ import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 bootstrapApplication(AppComponent, {
     providers: [
         importProvidersFrom(BrowserModule, AppRoutingModule, provideFirebaseApp(() => initializeApp({
-            apiKey: "AIzaSyCvI7L1C8UR8qgu9THArFj23OlflcTAKqM",
-            authDomain: "blog-app-a3a4f.firebaseapp.com",
-            projectId: "blog-app-a3a4f",
-            storageBucket: "blog-app-a3a4f.appspot.com",
-            messagingSenderId: "613877446325",
-            appId: "1:613877446325:web:215334c7308c637d31f0fc"
+            apiKey: "AIzaSyCjFwCLY4DvG4Xgiu0pLnrH388ijjhVZlw",
+            authDomain: "blog-app-735ec.firebaseapp.com",
+            projectId: "blog-app-735ec",
+            storageBucket: "blog-app-735ec.firebasestorage.app",
+            messagingSenderId: "195539064393",
+            appId: "1:195539064393:web:7d0be7cd9543834b251198",
+            measurementId: "G-NMJESWJL00"
         })), provideStorage(() => getStorage()), provideAuth(() => getAuth()), FirestoreModule, FormsModule, ToastrModule.forRoot(), AngularEditorModule, ReactiveFormsModule),
         provideAnimations(),
         provideHttpClient(withInterceptorsFromDi())
