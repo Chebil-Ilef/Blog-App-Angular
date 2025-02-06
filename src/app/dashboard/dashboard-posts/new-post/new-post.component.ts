@@ -114,7 +114,7 @@ export class NewPostComponent implements OnDestroy {
         categoryId : categoryId,
         category : category
       },
-      postImg : '',
+      postImg : this.selectedImage,
       excerpt : this.postForm.value.excerpt,
       content : this.postForm.value.content,
       isFeatured : false,
