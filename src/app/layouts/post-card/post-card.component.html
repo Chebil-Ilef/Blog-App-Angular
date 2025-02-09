@@ -10,7 +10,7 @@
             <small class="p-2 rounded bg-light text-info text-center ml-3"> Views - {{postInfo.views}}  </small>
         </div>
         <h5 class="mt-1"> {{postInfo.title}} </h5>
-        <p> {{ postInfo.excerpt }} </p>
+        <p style="height: 145px;" class="text-wrap text-truncate"> {{ postInfo.excerpt }} </p>
 
         <small class="p-2 rounded bg-light text-warning text-center"> LAST UPDATED - {{ postInfo.createdAt | timestampToDate | date}}  </small>
     </div>
